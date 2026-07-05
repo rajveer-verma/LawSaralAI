@@ -25,7 +25,7 @@ function Hero() {
             document using
             <span className="font-semibold text-blue-600">
               {" "}
-              Gemini AI, RAG, and Vector Database.
+              Gemini AI, RAG, and VectorDB.
             </span>
           </p>
 
