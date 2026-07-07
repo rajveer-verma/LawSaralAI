@@ -214,7 +214,8 @@ function UploadSection({ onUploadSuccess }) {
         </p>
 
         <p className="text-xs text-gray-400 mt-4">
-          PDF • PNG • JPG • Max 10 MB
+          {/* PDF • PNG • JPG • Max 10 MB */}
+          PDF Max 10 MB
         </p>
 
       </div>
