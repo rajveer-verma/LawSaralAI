@@ -14,6 +14,8 @@ import { chunkText } from "../utils/chunkText.js";
 import DocumentChat from "../models/DocumentChat.js";
 import { deleteDocumentVectors } from "../services/vectorService.js";
 
+import { extractImageText } from "../services/imageService.js";
+
 // ======================================
 // Upload Document
 // ======================================
@@ -50,16 +52,52 @@ export const uploadDocument = async (req, res) => {
 
     const qdrantDocumentId = randomUUID();
 
-    const extractedText =
-      await extractPdfText(req.file.path);
+    // ======================================
+    // Extract Text (PDF / Image)
+    // ======================================
+
+    let extractedText = "";
+
+    if (
+      req.file.mimetype === "application/pdf"
+    ) {
+
+      extractedText =
+        await extractPdfText(req.file.path);
+
+    } else if (
+      req.file.mimetype === "image/png" ||
+      req.file.mimetype === "image/jpeg" ||
+      req.file.mimetype === "image/jpg"
+    ) {
+
+      extractedText =
+        await extractImageText(
+          req.file.path,
+          req.file.mimetype
+        );
+
+    } else {
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Unsupported file type.",
+      });
+
+    }
 
     if (!extractedText.trim()) {
       return res.status(400).json({
         success: false,
         message:
-          "No readable text found in the uploaded PDF.",
+          "No readable text found in the uploaded document.",
       });
     }
+
+    // ======================================
+    // Chunking
+    // ======================================
 
     const chunks = chunkText(extractedText);
 
@@ -77,12 +115,18 @@ export const uploadDocument = async (req, res) => {
       embeddings.push(embedding);
 
       if (i !== chunks.length - 1) {
+
         await new Promise((resolve) =>
           setTimeout(resolve, 400)
         );
+
       }
 
     }
+
+    // ======================================
+    // Store in Qdrant
+    // ======================================
 
     await storeChunks(
       qdrantDocumentId,
@@ -91,28 +135,53 @@ export const uploadDocument = async (req, res) => {
       embeddings
     );
 
+    // ======================================
+    // AI Summary
+    // ======================================
+
     const summary =
       await generateSummary(
         extractedText
       );
 
+    // ======================================
+    // Save Document
+    // ======================================
+
     const document =
       await Document.create({
+
         userId: user._id,
-        filename: req.file.originalname,
+
+        filename:
+          req.file.originalname,
+
         summary,
+
         qdrantDocumentId,
+
       });
 
     return res.status(200).json({
+
       success: true,
-      documentId: document._id,
+
+      documentId:
+        document._id,
+
       qdrantDocumentId,
-      filename: req.file.originalname,
+
+      filename:
+        req.file.originalname,
+
       totalCharacters:
         extractedText.length,
-      totalChunks: chunks.length,
+
+      totalChunks:
+        chunks.length,
+
       summary,
+
     });
 
   } catch (error) {
@@ -127,33 +196,53 @@ export const uploadDocument = async (req, res) => {
       error?.error?.code;
 
     if (status === 503) {
+
       return res.status(503).json({
+
         success: false,
+
         message:
           "Gemini service is temporarily unavailable. Please try again after a few seconds.",
+
       });
+
     }
 
     if (
+
       error.message &&
+
       (
         error.message.includes("429") ||
-        error.message.includes("RESOURCE_EXHAUSTED") ||
+
+        error.message.includes(
+          "RESOURCE_EXHAUSTED"
+        ) ||
+
         error.message.includes("quota")
       )
+
     ) {
+
       return res.status(429).json({
+
         success: false,
+
         message:
           "Gemini API quota exceeded. Please try again later.",
+
       });
+
     }
 
     return res.status(500).json({
+
       success: false,
+
       message:
         error.message ||
         "Something went wrong while processing the document.",
+
     });
 
   } finally {
@@ -162,11 +251,11 @@ export const uploadDocument = async (req, res) => {
 
       try {
 
-        await fs.unlink(req.file.path);
+        await fs.unlink(
+          req.file.path
+        );
 
-      } catch (err) {
-        // Ignore if file is already removed
-      }
+      } catch (err) {}
 
     }
 
