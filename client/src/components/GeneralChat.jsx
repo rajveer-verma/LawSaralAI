@@ -259,7 +259,7 @@ function GeneralChat() {
 
         </div>
 
-        <div className="h-[500px] overflow-y-auto rounded-xl border bg-slate-50 p-5">
+        <div className="h-[400px] sm:h-[500px] overflow-y-auto rounded-xl border bg-slate-50 p-3 sm:p-5">
 
           {messages.map((msg, index) => (
 
@@ -274,13 +274,13 @@ function GeneralChat() {
 
               {msg.role === "ai" && (
                 <FaRobot
-                  size={30}
+                  size={24}
                   className="text-green-600 mr-3 mt-2"
                 />
               )}
 
               <div
-                className={`max-w-[80%] rounded-2xl px-5 py-4 shadow-sm ${
+                className={`max-w-[90%] sm:max-w-[80%] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 shadow-sm ${
                   msg.role === "user"
                     ? "bg-green-600 text-white"
                     : "bg-white border"
@@ -320,7 +320,7 @@ function GeneralChat() {
 
               {msg.role === "user" && (
                 <FaUserCircle
-                  size={30}
+                  size={24}
                   className="text-green-600 ml-3 mt-2"
                 />
               )}
@@ -350,31 +350,55 @@ function GeneralChat() {
 
         </div>
 
-        <div className="flex gap-3 mt-5">
+<div className="mt-5 flex flex-col sm:flex-row gap-3">
 
-          <input
-            type="text"
-            value={question}
-            onChange={(e) =>
-              setQuestion(e.target.value)
-            }
-            onKeyDown={handleKeyDown}
-            placeholder="Ask any legal question..."
-            className="flex-1 border rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+  <input
+    type="text"
+    value={question}
+    onChange={(e) =>
+      setQuestion(e.target.value)
+    }
+    onKeyDown={handleKeyDown}
+    placeholder="Ask any legal question..."
+    className="
+      w-full
+      sm:flex-1
+      border
+      rounded-xl
+      px-4
+      py-3
+      text-base
+      focus:outline-none
+      focus:ring-2
+      focus:ring-green-500
+    "
+  />
 
-          <button
-            onClick={handleSend}
-            disabled={loading}
-            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-6 rounded-xl flex items-center gap-2 transition"
-          >
+  <button
+    onClick={handleSend}
+    disabled={loading}
+    className="
+      w-full
+      sm:w-auto
+      bg-green-600
+      hover:bg-green-700
+      disabled:bg-gray-400
+      text-white
+      px-6
+      py-3
+      rounded-xl
+      flex
+      justify-center
+      items-center
+      gap-2
+      transition
+    "
+  >
+    <FaPaperPlane />
+    <span>Send</span>
+  </button>
 
-            <FaPaperPlane />
-            Send
-
-          </button>
-
-        </div>
+</div>
 
       </div>
 
@@ -390,3 +414,4 @@ function GeneralChat() {
 }
 
 export default GeneralChat;
+
