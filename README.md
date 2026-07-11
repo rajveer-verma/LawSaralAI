@@ -16,92 +16,43 @@ The platform allows users to upload legal documents in **PDF** or **Image** form
 
 ---
 
-# ✨ Features
+## 🚀 Features
 
-### 📄 Legal Document Analysis
+### 📄 AI Document Analysis
+- Upload PDF legal documents
+- Upload scanned legal document images (PNG/JPG/JPEG)
+- AI-generated legal document summaries
+- OCR support for image documents using Gemini Vision
+- Automatic text extraction
 
-- Upload PDF documents
-- Upload scanned legal documents
-- Upload image-based legal documents
-- AI-generated document summaries
-- Intelligent document chunking
-- Semantic document retrieval
-- Context-aware document question answering
-
----
-
-### 🖼 OCR Support
-
-- Image OCR using Gemini Vision
-- Supports PNG, JPG and JPEG files
-- Extracts text from scanned legal documents
-- Uses extracted text for AI analysis
-
----
-
-### 🤖 AI Features
-
-- Google Gemini AI
+### 🤖 Document AI Chat
+- Ask questions about uploaded documents
+- Context-aware AI responses
 - Retrieval-Augmented Generation (RAG)
-- Semantic Search
-- Vector Embeddings
-- Context-aware Question Answering
-- Hallucination-aware Responses
+- Semantic Vector Search
+- Hallucination-aware responses
 
----
+### ⚖️ General Legal Assistant
+- Ask legal questions without uploading documents
+- Simple AI-generated explanations
+- Markdown support
+- Copy responses
 
-### 👤 User Features
-
-- Google Authentication
-- User-specific document history
+### 📚 History Management
+- Upload history
+- Document history
 - User-specific chat history
-- AI-powered legal assistant
-- Document-specific conversations
+- Delete uploaded documents
 
----
+### 🔐 Authentication
+- Firebase Authentication
+- Secure user login
+- Protected routes
 
-### 🎨 Frontend Features
-
-- Responsive Design
+### 📱 Responsive UI
 - Mobile Friendly
-- Sidebar Navigation
-- Markdown Rendering
-- Copy AI Responses
-- Loading States
-- Clean UI
-
----
-
-# 🏗 System Architecture
-
-```
-          PDF / Image Upload
-                  │
-                  ▼
-     PDF Extraction / Gemini Vision OCR
-                  │
-                  ▼
-           Extracted Document Text
-                  │
-                  ▼
-          Intelligent Text Chunking
-                  │
-                  ▼
-      Gemini Embedding Generation
-        (3072-Dimensional Vectors)
-                  │
-                  ▼
-       Qdrant Vector Database
-                  │
-                  ▼
-      Retrieval-Augmented Generation
-                  │
-                  ▼
-         Google Gemini AI Model
-                  │
-                  ▼
-         AI Generated Response
-```
+- Desktop Friendly
+- Tablet Support
 
 ---
 
@@ -112,62 +63,75 @@ The platform allows users to upload legal documents in **PDF** or **Image** form
 - React.js
 - Vite
 - Tailwind CSS
-- Axios
 - React Router
+- Axios
 - React Markdown
 - React Icons
-
----
+- Firebase Authentication
 
 ## Backend
 
 - Node.js
 - Express.js
+- MongoDB
+- Mongoose
 - Multer
 - PDF.js
 
----
-
-## Database
-
-- MongoDB Atlas
-- Qdrant Vector Database
-
----
-
-## Authentication
-
-- Firebase Authentication
-
----
-
-## Artificial Intelligence
+## AI
 
 - Google Gemini AI
 - Gemini Vision OCR
+- Vector Embeddings
 - Retrieval-Augmented Generation (RAG)
 - Semantic Search
-- Vector Embeddings
+
+## Vector Database
+
+- Qdrant
 
 ---
 
-# 📂 Project Structure
+# ⚙️ System Architecture
 
 ```
-LawSaral
+User
+   │
+   ▼
+React Frontend
+   │
+   ▼
+Express API
+   │
+   ├── Firebase Authentication
+   ├── MongoDB
+   ├── PDF/Image Processing
+   ├── Gemini Vision OCR
+   ├── Gemini AI
+   └── Qdrant Vector Database
+```
+
+---
+
+# 📁 Project Structure
+
+```text
+LawSaral/
 │
-├── client
+├── client/                 # React Frontend
 │
-├── server
-│   ├── src
-│   │   ├── config
-│   │   ├── controllers
-│   │   ├── models
-│   │   ├── routes
-│   │   ├── services
-│   │   ├── utils
-│   │   └── uploads
+├── server/
+│   ├── src/
+│   │   ├── config/         # Database Configuration
+│   │   ├── controllers/    # API Controllers
+│   │   ├── middleware/     # Authentication & Upload Middleware
+│   │   ├── models/         # MongoDB Models
+│   │   ├── routes/         # API Routes
+│   │   ├── services/       # AI, OCR & Vector Services
+│   │   ├── utils/          # Helper Functions
+│   │   └── uploads/        # Temporary Uploaded Files
 │   │
+│   ├── package.json
 │   └── server.js
 │
 └── README.md
@@ -180,182 +144,164 @@ LawSaral
 ## Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/LawSaralAI.git
+git clone <repository-url>
+```
 
-cd LawSaralAI
+```bash
+cd LawSaral
 ```
 
 ---
 
-## Install Dependencies
-
-### Frontend
+## Install Client
 
 ```bash
 cd client
-
-npm install
-```
-
-### Backend
-
-```bash
-cd server
-
 npm install
 ```
 
 ---
 
-## Environment Setup
+## Install Server
 
-This project requires environment configuration files for both the frontend and backend.
-
-For security reasons, all API keys, authentication credentials, database connections, and other sensitive configuration values have been excluded from this repository.
+```bash
+cd ../server
+npm install
+```
 
 ---
 
-## Run Frontend
+## Start Backend
 
 ```bash
-cd client
-
 npm run dev
 ```
 
 ---
 
-## Run Backend
+## Start Frontend
 
 ```bash
-cd server
-
-npm start
+cd ../client
+npm run dev
 ```
 
 ---
 
-# 📡 REST API
+# 📄 Supported File Formats
 
-### Authentication
+- PDF
+- PNG
+- JPG
+- JPEG
 
-```
-POST /api/users/login
-```
+Maximum Upload Size
 
-### Upload Document
+- 10 MB
 
-```
-POST /api/upload
-```
+---
 
-### Upload History
+# 🤖 AI Workflow
 
-```
-GET /api/upload/history/:firebaseUid
-```
-
-### Get Document
+## PDF Upload
 
 ```
-GET /api/upload/document/:documentId
-```
-
-### Delete Document
-
-```
-DELETE /api/upload/:documentId
-```
-
-### Document Chat
-
-```
-POST /api/chat/document
-```
-
-### Document Chat History
-
-```
-GET /api/chat/history/:documentId
-```
-
-### General Legal Chat
-
-```
-POST /api/chat/general
-```
-
-### General Chat History
-
-```
-GET /api/chat/general/history/:firebaseUid
+Upload PDF
+      │
+      ▼
+Extract Text
+      │
+      ▼
+Chunk Document
+      │
+      ▼
+Generate Embeddings
+      │
+      ▼
+Store Vectors in Qdrant
+      │
+      ▼
+Generate AI Summary
+      │
+      ▼
+Document Ready for Chat
 ```
 
 ---
 
-# 📸 Screenshots
+## Image Upload
 
-## Home Page
-
-_Add screenshot_
-
----
-
-## Upload Document
-
-_Add screenshot_
-
----
-
-## AI Summary
-
-_Add screenshot_
-
----
-
-## Document Chat
-
-_Add screenshot_
-
----
-
-## General Legal AI
-
-_Add screenshot_
+```
+Upload Image
+      │
+      ▼
+Gemini Vision OCR
+      │
+      ▼
+Extract Text
+      │
+      ▼
+Chunk Document
+      │
+      ▼
+Generate Embeddings
+      │
+      ▼
+Store Vectors
+      │
+      ▼
+Generate Summary
+```
 
 ---
 
-## Mobile View
+# 💬 RAG Pipeline
 
-_Add screenshot_
-
----
-
-# 🌟 Highlights
-
-- AI-powered Legal Document Analysis
-- PDF & Image Support
-- Gemini Vision OCR
-- Google Gemini AI
-- Retrieval-Augmented Generation (RAG)
-- Qdrant Vector Database
+- Text Extraction
+- OCR (Images)
+- Intelligent Chunking
+- Vector Embeddings
+- Qdrant Vector Storage
 - Semantic Search
-- AI-powered Legal Assistant
-- Firebase Authentication
-- Responsive User Interface
-- Mobile Friendly
+- Context Retrieval
+- Gemini AI Response Generation
 
 ---
 
-# 🔮 Future Improvements
+# 🔒 Security Features
 
-- DOCX Support
-- AI Clause Detection
-- Multi-language Support
-- AI Risk Analysis
-- Export AI Summary as PDF
-- Legal Citation Support
-- AI Confidence Score
+- Firebase Authentication
+- User-specific Documents
+- User-specific Chat History
+- Protected APIs
+- File Type Validation
+- Upload Size Validation
+
+---
+
+# 📱 Responsive Design
+
+✔ Desktop
+
+✔ Tablet
+
+✔ Mobile
+
+---
+
+# 🎯 Key Functionalities
+
+- AI Legal Document Summary
+- AI Legal Chat
+- OCR for Images
+- PDF Processing
+- Semantic Search
+- Retrieval-Augmented Generation (RAG)
+- Upload History
+- Document History
+- General Legal Assistant
+- Copy AI Responses
+- Markdown Rendering
 
 ---
 
@@ -363,10 +309,10 @@ _Add screenshot_
 
 **Rajveer Verma**
 
-GitHub: https://github.com/YOUR_USERNAME
+Information Science & Engineering Student
 
-LinkedIn: https://linkedin.com/in/YOUR_LINKEDIN
+MERN Stack Developer | AI Enthusiast | DSA
 
 ---
 
-## ⭐ If you found this project helpful, consider giving it a Star.
+## ⭐ If you like this project, consider giving it a Star.
